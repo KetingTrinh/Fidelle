@@ -41,6 +41,7 @@ export default function App() {
     if (!isGameOver && (spermBottom < screenHeight)) {
       setSpermBottom(spermBottom => spermBottom + 50)
       console.log("jump!")
+      console.log("Current : ", score)
     }
   }
 
@@ -58,7 +59,7 @@ export default function App() {
     } else {
       setObstaclesLeft(screenWidth)
       setObstaclesNegHeight(- Math.random() * 100)
-      setScore(score => score++)
+      setScore(score => score+1)
     }
   }, [obstaclesLeft])
 
@@ -75,7 +76,7 @@ export default function App() {
     } else {
       setObstaclesLeftTwo(screenWidth)
       setObstaclesNegHeightTwo(- Math.random() * 200)
-      setScore(score => score++)
+      setScore(score => score + 1)
     }
   }, [obstaclesLeftTwo])
 
@@ -108,7 +109,7 @@ export default function App() {
   return (
     <TouchableWithoutFeedback onPress={jump}>
       <View style={styles.container}>
-        {isGameOver && <Text>You scored {score} points!</Text>}
+        
         <Sperm
           spermBottom={spermBottom}
           spermLeft={spermLeft}
@@ -132,6 +133,7 @@ export default function App() {
           obstaclesLeft = {obstaclesLeftTwo}
         />
 
+        {isGameOver && <Text style={styles.text}>You scored {score} points!</Text>}
       </View>
     </TouchableWithoutFeedback>
   );
@@ -143,5 +145,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  text : {
+    fontSize: 40,
   },
 });
