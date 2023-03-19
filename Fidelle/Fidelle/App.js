@@ -8,16 +8,19 @@ export default function App() {
   const screenWidth = Dimensions.get("screen").width
   const screenHeight = Dimensions.get("screen").height
   const spermLeft = screenWidth/2
-  const [spermBottom, setSpermBottom] = useState(screenHeight/2)
-  const [obstaclesLeft, setObstaclesLeft] = useState(screenWidth)
   const gravity = 3
   const obstacleWidth = 60
   const obstacleHeight = 300
   const gap = 200
+  const [spermBottom, setSpermBottom] = useState(screenHeight/2)
+  const [obstaclesLeft, setObstaclesLeft] = useState(screenWidth)
+  const [obstaclesLeftTwo, setObstaclesLeftTwo] = useState(screenWidth + screenWidth/2 + obstacleWidth/2)
+  const [obstaclesNegHeight, setObstaclesNegHeight] = useState(0)
+  const [obstaclesNegHeightTwo, setObstaclesNegHeightTwo] = useState(0)
 
   let gameTimerId
   let obstaclesLeftTimerId
-
+  let obstaclesLeftTimerIdTwo
 
   // Start Bird Falling 
   useEffect(() => {
@@ -31,7 +34,7 @@ export default function App() {
       }
     }
   }, [spermBottom])
-  console.log(spermBottom)
+  // console.log(spermBottom)
 
   // Start first obstacles
   useEffect(() => {
@@ -39,12 +42,56 @@ export default function App() {
       obstaclesLeftTimerId = setInterval(() => {
         setObstaclesLeft(obstaclesLeft => obstaclesLeft - 5)
       }, 30)
-    }
-
-    return () => {
-      clearInterval(obstaclesLeftTimerId)
+      
+      return () => {
+        clearInterval(obstaclesLeftTimerId)
+      }
+    } else {
+      setObstaclesLeft(screenWidth)
+      setObstaclesNegHeight(- Math.random() * 100)
     }
   }, [obstaclesLeft])
+
+  // Start second obstacles
+  useEffect(() => {
+    if (obstaclesLeftTwo > - obstacleWidth){
+      obstaclesLeftTimerIdTwo = setInterval(() => {
+        setObstaclesLeftTwo(obstaclesLeftTwo => obstaclesLeftTwo - 5)
+      }, 30)
+      
+      return () => {
+        clearInterval(obstaclesLeftTimerIdTwo)
+      }
+    } else {
+      setObstaclesLeftTwo(screenWidth)
+      setObstaclesNegHeightTwo(- Math.random() * 200)
+    }
+  }, [obstaclesLeftTwo])
+
+  // Check for collisions
+  useEffect(() => {
+    if (
+      ((spermBottom < (obstaclesNegHeight + obstacleHeight + 30) || 
+      spermBottom > (obstaclesNegHeight + obstacleHeight + gap - 30)) && 
+      (obstaclesLeft > screenWidth/2 - 30 && obstaclesLeft < screenWidth/2 +30)
+      )
+      || 
+      ((spermBottom < (obstaclesNegHeightTwo + obstacleHeight + 30) || 
+      spermBottom > (obstaclesNegHeightTwo + obstacleHeight + gap - 30)) && 
+      (obstaclesLeftTwo > screenWidth/2 - 30 && obstaclesLeftTwo < screenWidth/2 +30)
+      )
+    ){
+      console.log('game over')
+      gameOver()
+    }
+
+  })
+
+  const gameOver = () => {
+    clearInterval(gameTimerId)
+    clearInterval(obstaclesLeftTimerId)
+    clearInterval(obstaclesLeftTimerIdTwo)
+  }
 
   return (
     <View style={styles.container}>
@@ -54,11 +101,23 @@ export default function App() {
       />
 
       <Obstacles
+        color = {'green'}
         obstacleWidth = {obstacleWidth}
         obstacleHeight = {obstacleHeight}
+        randomBottom = {obstaclesNegHeight}
         gap = {gap}
         obstaclesLeft = {obstaclesLeft}
       />
+
+      <Obstacles
+        color = {'red'}
+        obstacleWidth = {obstacleWidth}
+        obstacleHeight = {obstacleHeight}
+        randomBottom = {obstaclesNegHeightTwo}
+        gap = {gap}
+        obstaclesLeft = {obstaclesLeftTwo}
+      />
+
     </View>
   );
 }
