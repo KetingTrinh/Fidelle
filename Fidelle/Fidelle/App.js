@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Dimensions, StyleSheet, Text, View } from 'react-native';
+import { Dimensions, StyleSheet, Text, View, TouchableWithoutFeedback } from 'react-native';
 import Sperm from './components/Sperm';
 import Obstacles from './components/Obstacles';
 
@@ -17,12 +17,14 @@ export default function App() {
   const [obstaclesLeftTwo, setObstaclesLeftTwo] = useState(screenWidth + screenWidth/2 + obstacleWidth/2)
   const [obstaclesNegHeight, setObstaclesNegHeight] = useState(0)
   const [obstaclesNegHeightTwo, setObstaclesNegHeightTwo] = useState(0)
+  const [score, setScore] = useState(0)
 
   let gameTimerId
   let obstaclesLeftTimerId
   let obstaclesLeftTimerIdTwo
+  const [isGameOver, setIsGameOver] = useState(false)
 
-  // Start Bird Falling 
+  // Start Sperm Falling 
   useEffect(() => {
     if (spermBottom > 0) {
       gameTimerId = setInterval(() => {
@@ -34,7 +36,14 @@ export default function App() {
       }
     }
   }, [spermBottom])
-  // console.log(spermBottom)
+
+  const jump = () => {
+    if (!isGameOver && (spermBottom < screenHeight)) {
+      setSpermBottom(spermBottom => spermBottom + 50)
+      console.log("jump!")
+    }
+  }
+
 
   // Start first obstacles
   useEffect(() => {
@@ -49,6 +58,7 @@ export default function App() {
     } else {
       setObstaclesLeft(screenWidth)
       setObstaclesNegHeight(- Math.random() * 100)
+      setScore(score => score++)
     }
   }, [obstaclesLeft])
 
@@ -65,6 +75,7 @@ export default function App() {
     } else {
       setObstaclesLeftTwo(screenWidth)
       setObstaclesNegHeightTwo(- Math.random() * 200)
+      setScore(score => score++)
     }
   }, [obstaclesLeftTwo])
 
@@ -83,6 +94,7 @@ export default function App() {
     ){
       console.log('game over')
       gameOver()
+      setIsGameOver(true)
     }
 
   })
@@ -94,31 +106,34 @@ export default function App() {
   }
 
   return (
-    <View style={styles.container}>
-      <Sperm
-        spermBottom={spermBottom}
-        spermLeft={spermLeft}
-      />
+    <TouchableWithoutFeedback onPress={jump}>
+      <View style={styles.container}>
+        {isGameOver && <Text>You scored {score} points!</Text>}
+        <Sperm
+          spermBottom={spermBottom}
+          spermLeft={spermLeft}
+        />
 
-      <Obstacles
-        color = {'green'}
-        obstacleWidth = {obstacleWidth}
-        obstacleHeight = {obstacleHeight}
-        randomBottom = {obstaclesNegHeight}
-        gap = {gap}
-        obstaclesLeft = {obstaclesLeft}
-      />
+        <Obstacles
+          color = {'green'}
+          obstacleWidth = {obstacleWidth}
+          obstacleHeight = {obstacleHeight}
+          randomBottom = {obstaclesNegHeight}
+          gap = {gap}
+          obstaclesLeft = {obstaclesLeft}
+        />
 
-      <Obstacles
-        color = {'red'}
-        obstacleWidth = {obstacleWidth}
-        obstacleHeight = {obstacleHeight}
-        randomBottom = {obstaclesNegHeightTwo}
-        gap = {gap}
-        obstaclesLeft = {obstaclesLeftTwo}
-      />
+        <Obstacles
+          color = {'red'}
+          obstacleWidth = {obstacleWidth}
+          obstacleHeight = {obstacleHeight}
+          randomBottom = {obstaclesNegHeightTwo}
+          gap = {gap}
+          obstaclesLeft = {obstaclesLeftTwo}
+        />
 
-    </View>
+      </View>
+    </TouchableWithoutFeedback>
   );
 }
 
