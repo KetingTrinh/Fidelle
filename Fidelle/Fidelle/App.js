@@ -4,6 +4,7 @@ import Home from './screens/Home';
 import Game from './screens/Game';
 import StoryMode from './screens/StoryMode';
 import Popup from './screens/Popup';
+import ChapterOne from './screens/ChapterOne';
 
 import React, { useEffect, useState } from 'react';
 import { Dimensions, StyleSheet, Text, View, TouchableWithoutFeedback } from 'react-native';
@@ -27,7 +28,8 @@ export default function App() {
   return(
   <NavigationContainer>
     <Stack.Navigator>
-      <Stack.Screen options= {{headerShown: true}} name="Home" component = {Home} />
+      <Stack.Screen options= {{headerShown: false}} name="Home" component = {Home} />
+      <Stack.Screen options= {{headerShown: false}} name="Chapter One" component = {ChapterOne} />
       <Stack.Screen options= {{headerShown: false}} name="Popup" component = {Popup} />
       <Stack.Screen options= {{headerShown: false}} name="Game" component = {Game} />
       <Stack.Screen options= {{headerShown: false}} name="Story Mode" component = {StoryMode} />

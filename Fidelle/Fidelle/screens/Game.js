@@ -93,8 +93,8 @@ const Game = () => {
   
     // Check for collisions
     useEffect(() => {
-      if (
-        ((spermBottom < (obstaclesNegHeight + obstacleHeight + 30) || 
+      if (!isGameOver &&
+        (((spermBottom < (obstaclesNegHeight + obstacleHeight + 30) || 
         spermBottom > (obstaclesNegHeight + obstacleHeight + gap - 30)) && 
         (obstaclesLeft > screenWidth/2 - 30 && obstaclesLeft < screenWidth/2 +30)
         )
@@ -102,12 +102,13 @@ const Game = () => {
         ((spermBottom < (obstaclesNegHeightTwo + obstacleHeight + 30) || 
         spermBottom > (obstaclesNegHeightTwo + obstacleHeight + gap - 30)) && 
         (obstaclesLeftTwo > screenWidth/2 - 30 && obstaclesLeftTwo < screenWidth/2 +30)
-        )
+        ))
       ){
         gameOver()
         setIsGameOver(true)
       }
-  
+      
+
     })
   
     const gameOver = () => {
