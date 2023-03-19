@@ -12,6 +12,9 @@ const Home = () => {
     const goToGame = () => {
         navigation.replace("Game")
     }
+    const goToStory = () => {
+      navigation.replace("Story Mode")
+  }
 
     console.log("You is home")
   return (
@@ -29,6 +32,20 @@ const Home = () => {
             width :400}}>
 
             START GAME!
+        </Text>
+      </TouchableOpacity>
+      <TouchableOpacity onPress = {goToStory}>
+        <Text style = {{
+            borderWidth:2,
+            borderRadius:20,
+            marginRight:30,
+            marginVertical:30,
+            backgroundColor:'white',
+            padding:10,
+            height:450,
+            width :400}}>
+
+            START STORY!
         </Text>
       </TouchableOpacity>
     </View>

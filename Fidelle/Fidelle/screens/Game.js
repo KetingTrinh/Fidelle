@@ -1,9 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { Dimensions, StyleSheet, Text, View, TouchableWithoutFeedback } from 'react-native';
+import { Dimensions, StyleSheet, Text, View, TouchableWithoutFeedback, Image } from 'react-native';
 import Sperm from '../components/Sperm';
 import Obstacles from '../components/Obstacles';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { useNavigation } from '@react-navigation/native'
+import Popup from './Popup';
+
+let finalScore;
 
 const Game = () => {
 
@@ -101,7 +104,6 @@ const Game = () => {
         (obstaclesLeftTwo > screenWidth/2 - 30 && obstaclesLeftTwo < screenWidth/2 +30)
         )
       ){
-        console.log('game over')
         gameOver()
         setIsGameOver(true)
       }
@@ -112,19 +114,24 @@ const Game = () => {
       clearInterval(gameTimerId)
       clearInterval(obstaclesLeftTimerId)
       clearInterval(obstaclesLeftTimerIdTwo)
+      console.log("YOU LOST with a score of ", score)
+      finalScore = score
+      module.exports = {finalScore}
+      navigation.replace("Popup")
     }
   
     return (
       <TouchableWithoutFeedback onPress={jump}>
         <View style={styles.container}>
-          
+          <Image source = {require('../assets/background.png')} style = {styles.image}/>
+
           <Sperm
             spermBottom={spermBottom}
             spermLeft={spermLeft}
           />
   
           <Obstacles
-            color = {'green'}
+            // color = {'green'}
             obstacleWidth = {obstacleWidth}
             obstacleHeight = {obstacleHeight}
             randomBottom = {obstaclesNegHeight}
@@ -133,30 +140,20 @@ const Game = () => {
           />
   
           <Obstacles
-            color = {'red'}
+            // color = {'red'}
             obstacleWidth = {obstacleWidth}
             obstacleHeight = {obstacleHeight}
             randomBottom = {obstaclesNegHeightTwo}
             gap = {gap}
             obstaclesLeft = {obstaclesLeftTwo}
-          />
-  
-          {isGameOver && <View>
-            <Text style={styles.text}>You {score} points!</Text>
-            <TouchableOpacity onPress={goToHome}>
-                <Text>Let's go home</Text>
-            </TouchableOpacity>
-
-          </View>
-            }
-
-
+          />    
         </View>
       </TouchableWithoutFeedback>
     );
 }
 
-export default Game
+export default Game; 
+
 
 const styles = StyleSheet.create({
     container: {
@@ -168,4 +165,14 @@ const styles = StyleSheet.create({
       text : {
         fontSize: 40,
       },
+      image : {
+        width: '100%',
+        height: '100%',
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderWidth: 10,
+        // overflow: 'hidden',
+        objectFit: 'cover',
+      },
+
 })
