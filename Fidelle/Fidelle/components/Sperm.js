@@ -12,7 +12,7 @@ const Sperm = ({spermBottom, spermLeft}) => {
         width: spermWidth,
         height: spermHeight,
         left: spermLeft - (spermWidth/2),
-        bottom: spermBottom - (spermHeight/2)
+        bottom: spermBottom //- (spermHeight/2)
     }}/>
   )
 }
